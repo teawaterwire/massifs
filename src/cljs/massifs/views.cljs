@@ -8,7 +8,7 @@
 
 (defn handle-massif-click [massif massif-to-find]
   (if (= massif massif-to-find)
-    (rf/dispatch [:new-massif-to-find])))
+    (rf/dispatch [:massif-found])))
 
 (defn massif-path [{:keys [path] :as massif}]
   (let [hovered? (atom false)]
@@ -24,13 +24,19 @@
   (if-let [massifs @(rf/subscribe [:massifs-data])]
     [:div.has-text-centered
 
+     (if-let [score @(rf/subscribe [:get :score])]
+       [:section.hero.is-bold.is-dark
+        [:div.hero-body
+         [:div.container
+          [:h1.title.is1 "Score: " [:strong score]]
+          [:progress.progress {:value @(rf/subscribe [:get :time-left]) :max "30"}]]]])
+
+
      (if-not (pos? @(rf/subscribe [:get :time-left]))
        [:div.is-overlay
         [:section.hero.is-fullheight {:style {:background "rgba(50, 115, 220, 0.67)"}}
          [:div.hero-body
           [:div.container
-           (if-let [score @(rf/subscribe [:get :score])]
-             [:h1.title.is1 "Score: " score])
            [:button.button.is-primary.is-large
             {:on-click #(rf/dispatch [:start])}
             "JOUER"]]]]]
@@ -40,6 +46,7 @@
            [:div.container
             [:h1.title name]
             [:h2.subtitle zone]]]]))
+
 
      [:svg {:width 294 :height 410 :view-box "361 20 147 205"}
       [:g

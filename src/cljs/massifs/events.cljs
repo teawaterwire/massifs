@@ -23,7 +23,7 @@
 
 (rf/reg-event-db
  :tick
- debug-interceptor
+ ; debug-interceptor
  (fn [{:keys [ time-left] :as db}]
    (if (pos? time-left)
      (assoc db :time-left (dec time-left))
@@ -36,10 +36,17 @@
    (assoc db :massif-to-find (rand-nth massifs-data))))
 
 (rf/reg-event-fx
+ :massif-found
+ debug-interceptor
+ (fn [{:keys [db]}]
+   {:db (update db :score #(+ % 30))
+    :dispatch [:new-massif-to-find]}))
+
+(rf/reg-event-fx
  :start
  debug-interceptor
  (fn [{:keys [db]}]
-   {:db (assoc db :time-left 30)
+   {:db (assoc db :time-left 30 :score 0)
     :dispatch [:new-massif-to-find]}))
 
 (rf/reg-event-db
