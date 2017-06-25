@@ -2,23 +2,31 @@
   (:require [re-frame.core :as rf]
             [reagent.core :refer [atom]]))
 
-(def metal->hex {:gold "#C98910"
-                 :silver "#A8A8A8"
-                 :bronze "#965A38"})
+(def ->hex {:gold "#C98910"
+            :silver "#A8A8A8"
+            :bronze "#965A38"
+            :danger "#ff3860"
+            :success "#23d160"})
 
 (defn handle-massif-click [massif massif-to-find]
   (if (= massif massif-to-find)
-    (rf/dispatch [:massif-found])))
+    (rf/dispatch [:massif-found massif])
+    (rf/dispatch [:massif-not-found massif])))
 
 (defn massif-path [{:keys [path] :as massif}]
   (let [hovered? (atom false)]
     (fn []
-      [:path.pointer
-       {:d path
-        :on-click #(handle-massif-click massif @(rf/subscribe [:get :massif-to-find]))
-        :on-mouse-enter #(reset! hovered? true)
-        :on-mouse-leave #(reset! hovered? false)
-        :fill (get metal->hex (if @hovered? :bronze :silver))}])))
+      (let [highlighted? (= massif @(rf/subscribe [:get :massif-highlighted]))]
+        [:path.pointer
+         {:d path
+          :on-click #(handle-massif-click massif
+                                          @(rf/subscribe [:get :massif-to-find]))
+          :on-mouse-enter #(reset! hovered? true)
+          :on-mouse-leave #(reset! hovered? false)
+          :stroke (if (true? highlighted?) "black")
+          :fill (get ->hex (if (true? highlighted?)
+                             @(rf/subscribe [:get :highlight-type])
+                             (if @hovered? :bronze :silver)))}]))))
 
 (defn main-panel []
   (if-let [massifs @(rf/subscribe [:massifs-data])]
@@ -28,9 +36,8 @@
        [:section.hero.is-bold.is-dark
         [:div.hero-body
          [:div.container
-          [:h1.title.is1 "Score: " [:strong score]]
+          [:h1.title.is1 "Score : " [:strong score]]
           [:progress.progress {:value @(rf/subscribe [:get :time-left]) :max "30"}]]]])
-
 
      (if-not (pos? @(rf/subscribe [:get :time-left]))
        [:div.is-overlay

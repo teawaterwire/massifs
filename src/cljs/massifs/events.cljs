@@ -38,9 +38,22 @@
 (rf/reg-event-fx
  :massif-found
  debug-interceptor
- (fn [{:keys [db]}]
-   {:db (update db :score #(+ % 30))
+ (fn [{:keys [db]} [_ massif]]
+   {:db (-> db
+            (update :score #(+ % (- 30 (:tries db))))
+            (assoc :massif-highlighted massif :highlight-type :success
+                   :tries 0))
+    :dispatch-later [{:ms 600 :dispatch [:set :massif-highlighted nil]}]
     :dispatch [:new-massif-to-find]}))
+
+(rf/reg-event-fx
+ :massif-not-found
+ debug-interceptor
+ (fn [{:keys [db]} [_ massif]]
+   {:db (-> db
+            (update :tries inc)
+            (assoc :massif-highlighted massif :highlight-type :danger))
+    :dispatch-later [{:ms 600 :dispatch [:set :massif-highlighted nil]}]}))
 
 (rf/reg-event-fx
  :start
