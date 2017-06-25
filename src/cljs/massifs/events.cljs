@@ -33,7 +33,10 @@
  :new-massif-to-find
  debug-interceptor
  (fn [{:keys [massifs-data] :as db}]
-   (assoc db :massif-to-find (rand-nth massifs-data))))
+   (update db :massif-to-find (fn [m] (loop []
+                                        (let [m' (rand-nth massifs-data)]
+                                          (if (= m m') (recur)
+                                            m')))))))
 
 (rf/reg-event-fx
  :massif-found
