@@ -8,19 +8,13 @@
             :danger "#ff3860"
             :success "#23d160"})
 
-(defn handle-massif-click [massif massif-to-find]
-  (if (= massif massif-to-find)
-    (rf/dispatch [:massif-found massif])
-    (rf/dispatch [:massif-not-found massif])))
-
 (defn massif-path [{:keys [path] :as massif}]
   (let [hovered? (atom false)]
     (fn []
       (let [highlighted? (= massif @(rf/subscribe [:get :massif-highlighted]))]
         [:path.pointer
          {:d path
-          :on-click #(handle-massif-click massif
-                                          @(rf/subscribe [:get :massif-to-find]))
+          :on-click #(rf/dispatch [:massif-clicked massif])
           :on-mouse-enter #(reset! hovered? true)
           :on-mouse-leave #(reset! hovered? false)
           :stroke (if (true? highlighted?) "black")

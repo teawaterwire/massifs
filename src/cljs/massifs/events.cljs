@@ -59,6 +59,15 @@
     :dispatch-later [{:ms 600 :dispatch [:set :massif-highlighted nil]}]}))
 
 (rf/reg-event-fx
+ :massif-clicked
+ debug-interceptor
+ (fn [{:keys [db]} [_ massif]]
+   (let [event (if (= massif (:massif-to-find db))
+                 :massif-found
+                 :massif-not-found)]
+     {:dispatch [event massif]})))
+
+(rf/reg-event-fx
  :start
  debug-interceptor
  (fn [{:keys [db]}]
