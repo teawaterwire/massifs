@@ -10,7 +10,7 @@
  (fn [_ _]
    {:db db/default-db
     :http-xhrio {:method :get
-                 :uri "/alps3.json"
+                 :uri "alps3.json"
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [:set-massifs]
                  :on-failure [:set-massifs nil]}}))
