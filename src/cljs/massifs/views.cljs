@@ -29,7 +29,7 @@
   (if-let [massifs @(rf/subscribe [:massifs-data])]
     [:div.container
 
-     (let [{:keys [name zone]} @(rf/subscribe [:get :massif-to-find])
+     (let [{:keys [name zone] :or {name "Jeu des Massifs" zone "⛰⛰⛰"}} @(rf/subscribe [:get :massif-to-find])
            score @(rf/subscribe [:get :score])]
        [:nav.level.mt20
         [:div.level-item.has-text-centered
