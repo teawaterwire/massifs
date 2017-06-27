@@ -5,3 +5,35 @@ body {
 .pointer {
   cursor: pointer;
 }
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.z1 {
+  z-index: 1;
+}
+
+.z-1 {
+  z-index: -1;
+}
+
+.r0 {
+  right: 0;
+}
+
+.l0 {
+  left: 0;
+}
+
+.m20 {
+  margin: 20px;
+}
+
+.m40 {
+  margin: 40px;
+}

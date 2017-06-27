@@ -10,7 +10,7 @@
  (fn [_ _]
    {:db db/default-db
     :http-xhrio {:method :get
-                 :uri "/alps.json"
+                 :uri "/alps3.json"
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [:set-massifs]
                  :on-failure [:set-massifs nil]}}))
@@ -19,7 +19,7 @@
  :set-massifs
  debug-interceptor
  (fn [db [_ data]]
-   (assoc db :massifs-data data)))
+   (assoc db :massifs-data (remove #(empty? (:path %)) data))))
 
 (rf/reg-event-db
  :tick
