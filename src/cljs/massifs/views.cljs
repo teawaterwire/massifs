@@ -31,7 +31,7 @@
 
      (let [{:keys [name zone] :or {name "Jeu des Massifs" zone "⛰⛰⛰"}} @(rf/subscribe [:get :massif-to-find])
            score @(rf/subscribe [:get :score])]
-       [:nav.level.mt20
+       [:nav.level.mt20.is-mobile
         [:div.level-item.has-text-centered
          [:div
           [:p.heading "sablier"]
@@ -39,7 +39,7 @@
         [:div.level-item.has-text-centered
          [:div
           [:p.heading zone]
-          [:p.title name]]]
+          [:h1.title name]]]
         [:div.level-item.has-text-centered
          [:div
           [:p.heading "score"]
@@ -48,7 +48,7 @@
      [:div.relative {:style {:width "410px" :height "577px" :margin "auto"}}
       (if-not (pos? @(rf/subscribe [:get :time-left]))
         [:div.is-overlay {:style {:background-color "rgba(0,0,0,0.5)"}}
-         [:div.has-text-centered.relative {:style {:top "45%"}}
+         [:div.has-text-centered.absolute {:style {:top "50%" :transform "translateY(-50%)" :width "100%"}}
           [:button.button.is-light.is-large {:on-click #(rf/dispatch [:start])} "JOUER"]]])
       [:img.absolute.z-1
        {:src "img/alpes.png"
