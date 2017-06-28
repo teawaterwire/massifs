@@ -9,7 +9,7 @@
                          (reset! scores
                                  (js->clj (.val snap) :keywordize-keys true)))))]
     (fn []
-      [:div.container.m40
+      [:div.m40
        [:h2.subtitle.is-2 " ⏳ Histoire, mémoire et gloire :"]
        [:table.table
         [:thead
