@@ -81,7 +81,7 @@
  :start
  debug-interceptor
  (fn [{:keys [db]}]
-   {:db (assoc db :time-left 42 :score 0)
+   {:db (assoc db :time-left 2 :score 0)
     :dispatch [:new-massif-to-find]}))
 
 (rf/reg-event-db

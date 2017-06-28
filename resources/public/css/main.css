@@ -46,6 +46,14 @@ body {
   margin-top: 40px;
 }
 
+.p10 {
+  padding: 10px;
+}
+
 .white-text {
-  color: #fff;
+  color: #fff !important;
+}
+
+.white {
+  background-color: #fff !important;
 }
