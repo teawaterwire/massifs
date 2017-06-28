@@ -12,7 +12,9 @@
 (defn massif-path [{:keys [path] :as massif}]
   (let [hovered? (atom false)]
     (fn []
-      (let [highlighted? (= massif @(rf/subscribe [:get :massif-highlighted]))]
+      (let [highlighted? (= massif @(rf/subscribe [:get :massif-highlighted]))
+            revealed? (and (= massif @(rf/subscribe [:get :massif-to-find]))
+                           (true? @(rf/subscribe [:get :massif-revealed?])))]
         [:path.pointer
          {:d path
           :on-click #(rf/dispatch [:massif-clicked massif])
@@ -22,12 +24,12 @@
           :fill-opacity 0.4
           :fill (get ->hex (if (true? highlighted?)
                              @(rf/subscribe [:get :highlight-type])
-                             (if @hovered? :bronze :transparent)))
+                             (if @hovered? :bronze (if revealed? :gold :transparent))))
           :stroke (get ->hex (if @hovered? :gold :silver))}]))))
 
 (defn main-panel []
   (if-let [massifs @(rf/subscribe [:massifs-data])]
-    [:div.container
+    [:div.container.is-unselectable
 
      (let [{:keys [name zone] :or {name "Jeu des Massifs" zone "⛰⛰⛰"}} @(rf/subscribe [:get :massif-to-find])
            score @(rf/subscribe [:get :score])]
