@@ -4,8 +4,10 @@
 (defn footer []
   (let [scores (atom nil)
         fref (.. js/firebase (database) (ref "scores"))
-        _ (.. fref (on "value" (fn [snap]
-                                 (reset! scores (js->clj (.val snap) :keywordize-keys true)))))]
+        _ (.. fref (on "value"
+                       (fn [snap]
+                         (reset! scores
+                                 (js->clj (.val snap) :keywordize-keys true)))))]
     (fn []
       [:div.container.m40
        [:h2.subtitle.is-2 " ⏳ Histoire, mémoire et gloire :"]
