@@ -22,8 +22,8 @@
                          (reset! scores
                                  (js->clj (.val snap) :keywordize-keys true)))))]
     (fn []
-      [:div
-       [:table.table.m40
+      [:div.m40
+       [:table.table
         [:thead
          [:tr
           [:th "Position"]
@@ -37,6 +37,7 @@
              [:td username]
              [:td score]])
           (get-scores))]]
+       
       ;  [:footer.footer
       ;   [:div.container
       ;    [:div.content.has-text-centered
