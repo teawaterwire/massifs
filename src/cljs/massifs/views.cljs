@@ -47,10 +47,11 @@
 
 (defn save! [username score saved?]
   (reset! saved? false)
-  (.. js/firebase (database) (ref "scores/")
-      (push)
-      (set #js {:username username :score score})
-      (then (fn [] (reset! saved? true)))))
+  (let [u (.trim username)]
+    (.. js/firebase (database) (ref (str "usernames/" u))
+        (set score)
+        (then #(reset! saved? true))
+        (catch #(reset! saved? true)))))
 
 (defn save-card []
   (let [saved? (atom nil)]

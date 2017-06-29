@@ -1,17 +1,29 @@
 (ns massifs.footer
   (:require [reagent.core :refer [atom]]))
 
+(def scores (atom nil))
+
+; (defn max-score [scores]
+;   (apply max (map :score scores)))
+;
+; (defn get-scores []
+;   (let [grouped-scores (group-by :username (vals @scores))
+;         max-scores (map (fn [[uname scores]] [uname (max-score scores)]) grouped-scores)
+;         sorted-scored (sort-by second > max-scores)]
+;     sorted-scored))
+
+(defn get-scores []
+  (sort-by second > @scores))
+
 (defn footer []
-  (let [scores (atom nil)
-        fref (.. js/firebase (database) (ref "scores"))
+  (let [fref (.. js/firebase (database) (ref "usernames"))
         _ (.. fref (on "value"
                        (fn [snap]
                          (reset! scores
                                  (js->clj (.val snap) :keywordize-keys true)))))]
     (fn []
-      [:div.m40
-       [:h2.subtitle.is-2 " ⏳ Histoire, mémoire et gloire :"]
-       [:table.table
+      [:div
+       [:table.table.m40
         [:thead
          [:tr
           [:th "Position"]
@@ -19,9 +31,18 @@
           [:th "Score"]]]
         [:tbody
          (map-indexed
-          (fn [i [k {:keys [username score]}]] ^{:key k}
+          (fn [i [username score]] ^{:key username}
             [:tr
-             [:td "#" (inc i)]
+             [:th (get ["🥇" "🥈" "🥉"] i (inc i))]
              [:td username]
              [:td score]])
-          (sort-by (fn [[_ {:keys [score]}]] score) > @scores))]]])))
+          (get-scores))]]
+      ;  [:footer.footer
+      ;   [:div.container
+      ;    [:div.content.has-text-centered
+      ;     [:p
+      ;      [:strong "Le Jeu des Massifs"]
+      ;      " est proposé par "
+      ;      [:strong [:a {:href "https://fr.booctin.com/mountain"} "Booctin'"]]]
+      ;     [:p [:small "Merci aux massifs d'avoir jouer le jeu."]]]]]
+       ])))
