@@ -1,6 +1,6 @@
 (defproject massifs "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.9.562"]
+                 [org.clojure/clojurescript "1.9.671"]
                  [reagent "0.6.0"]
                  [re-frame "0.9.4"]
                  [cljsjs/firebase "4.0.0-0"]
@@ -33,6 +33,7 @@
                     :output-dir           "resources/public/js/compiled/out"
                     :asset-path           "js/compiled/out"
                     :source-map-timestamp true
+                    :parallel-build true
                     :preloads             [devtools.preload]
                     :external-config      {:devtools/config {:features-to-install :all}}
                     }}
@@ -42,6 +43,7 @@
      :compiler     {:main            massifs.core
                     :output-to       "resources/public/js/compiled/app.js"
                     :optimizations   :advanced
+                    :parallel-build true
                     :closure-defines {goog.DEBUG false}
                     :pretty-print    false}}
 
