@@ -26,7 +26,7 @@ Figwheel va faire sa petite :stew: tambouille...
 ## Pour faire tourner ça dans le :cloud: nuage
 
 
-On crache le js à partir du cljs :
+On crache le `js` à partir du `cljs` :
 
 ```
 lein clean
@@ -35,4 +35,4 @@ lein cljsbuild once min
 
 ## :raised_hands: Crédits
 
-Merci à Wikipedia pour :sunrise_over_mountains: [les données des massifs](https://fr.wikipedia.org/wiki/G%C3%A9ographie_des_Alpes). 
+Merci à Wikipedia pour :sunrise_over_mountains: [les données des massifs](https://fr.wikipedia.org/wiki/G%C3%A9ographie_des_Alpes).
