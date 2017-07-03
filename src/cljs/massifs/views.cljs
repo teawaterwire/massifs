@@ -1,9 +1,9 @@
 (ns massifs.views
   (:require [re-frame.core :as rf]
-            [massifs.footer :refer [footer]]
+            [massifs.leaderboard :refer [leaderboard]]
             [reagent.core :refer [atom]]))
 
-(def ->hex {:gold "#C98910"
+(def colrs {:gold "#C98910"
             :silver "#A8A8A8"
             :bronze "#965A38"
             :transparent "transparent"
@@ -23,10 +23,10 @@
           :on-mouse-leave #(reset! hovered? false)
           :stroke-width 4
           :fill-opacity (if revealed? 1 0.4)
-          :fill (get ->hex (if (true? highlighted?)
+          :fill (get colrs (if (true? highlighted?)
                              @(rf/subscribe [:get :highlight-type])
                              (if @hovered? :bronze (if revealed? :gold :transparent))))
-          :stroke (get ->hex (if @hovered? :gold :silver))}]))))
+          :stroke (get colrs (if @hovered? :gold :silver))}]))))
 
 (defn nav []
   (let [{:keys [name zone] :or {name "Jeu des Massifs" zone "⛰⛰⛰"}} @(rf/subscribe [:get :massif-to-find])
@@ -61,9 +61,10 @@
          [:div.field
           [:label.label "Pseudonyme d'usage"]
           [:p.control
-           [:input.input {:type "text" :placeholder "La Reine des Massifs"
-                          :value username
-                          :on-change #(rf/dispatch [:set :username (.. % -target -value)])}]]]
+           [:input.input
+            {:type "text" :placeholder "La Reine des Massifs"
+             :value username
+             :on-change #(rf/dispatch [:set :username (.. % -target -value)])}]]]
          [:div.field
           [:p.control
            [:button.button.iis-outlined.is-primary
@@ -75,13 +76,14 @@
   [:div.is-overlay {:style {:background-color "rgba(0,0,0,0.5)"}}
    (let [score @(rf/subscribe [:get :score])
          username @(rf/subscribe [:get :username])]
-     [:div.has-text-centered.absolute {:style {:top "50%" :transform "translateY(-50%)" :width "100%"}}
+     [:div.has-text-centered.absolute
+      {:style {:top "50%" :transform "translateY(-50%)" :width "100%"}}
       [save-card username score]
       [:button.button.is-light.is-large {:on-click #(rf/dispatch [:start])}
        (if (nil? score) "JOUER" "REJOUER")]])])
 
 (defn main-panel []
-  (if-let [massifs @(rf/subscribe [:massifs-data])]
+  (if-let [massifs @(rf/subscribe [:get :massifs-data])]
     [:div.container.is-unselectable
      [nav]
      [:div.relative {:style {:width "410px" :height "577px" :margin "auto"}}
@@ -89,10 +91,10 @@
         [overlay])
       [:img.absolute.z-1
        {:src "img/alpes.png"
-        :style {:outline (str "5px dashed " (:silver ->hex))}}]
+        :style {:outline (str "5px dashed " (:silver colrs))}}]
       [:svg
        {:width 410 :height 577 :view-box "118 72 1338 1889"}
        [:g
         (for [{:keys [slug] :as massif} massifs] ^{:key slug}
           [massif-path massif])]]]
-     [footer]]))
+     [leaderboard]]))
