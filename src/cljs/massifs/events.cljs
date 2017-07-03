@@ -3,7 +3,9 @@
             [ajax.core :as ajax]
             [massifs.db :as db]))
 
-(def debug-interceptor [(when ^boolean js/goog.DEBUG rf/debug)])
+(def check-spec-interceptor (rf/after (partial db/check-and-throw :massifs.db/db)))
+(def debug-interceptor (when ^boolean js/goog.DEBUG
+                         [check-spec-interceptor rf/debug]))
 
 (rf/reg-event-fx
  :initialize-db
